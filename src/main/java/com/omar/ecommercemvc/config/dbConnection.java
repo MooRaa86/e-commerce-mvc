@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class dbConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/ecommerce-mvc";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "12345";
+    private static final String PASSWORD = "root";
     public static Connection getConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
