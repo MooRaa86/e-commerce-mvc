@@ -30,7 +30,7 @@ public class UserDAO {
         String sql = "SELECT id FROM users WHERE email = ? OR username = ?";
         try (Connection connection = dbConnection.getConnection();
 
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, email);
             statement.setString(2, username);
             ResultSet resultSet = statement.executeQuery();
@@ -56,30 +56,6 @@ public class UserDAO {
                 user.setRole(resultSet.getString("role"));
                 return user;
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return null;
-    }
-
-    public User findById(Long id) {
-        String sql = "SELECT * FROM users WHERE id = ?";
-
-        try (Connection connection = dbConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getLong("id"));
-                user.setUsername(resultSet.getString("username"));
-                user.setEmail(resultSet.getString("email"));
-                user.setPassword(resultSet.getString("password"));
-                user.setRole(resultSet.getString("role"));
-                return user;
-            }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

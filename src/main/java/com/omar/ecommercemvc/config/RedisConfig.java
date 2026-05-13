@@ -19,9 +19,9 @@ public class RedisConfig {
             poolConfig.setMinIdle(1);
 
             jedisPool = new JedisPool(poolConfig, REDIS_HOST, REDIS_PORT);
-            System.out.println("[REDIS] Connection pool initialized");
+            System.out.println("Connection pool initialized");
         } catch (Exception e) {
-            System.out.println("[REDIS] Failed to initialize pool: " + e.getMessage());
+            System.out.println("Failed to initialize pool: " + e.getMessage());
         }
     }
 
@@ -33,7 +33,7 @@ public class RedisConfig {
         try (Jedis jedis = jedisPool.getResource()) {
             return "PONG".equals(jedis.ping());
         } catch (Exception e) {
-            System.out.println("[REDIS] Not available: " + e.getMessage());
+            System.out.println("Not available: " + e.getMessage());
             return false;
         }
     }

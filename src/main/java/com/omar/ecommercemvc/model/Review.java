@@ -11,7 +11,6 @@ public class Review {
     private String comment;
     private Timestamp createdAt;
 
-    // Extra fields for display purposes
     private String username;
 
     public Review() {
