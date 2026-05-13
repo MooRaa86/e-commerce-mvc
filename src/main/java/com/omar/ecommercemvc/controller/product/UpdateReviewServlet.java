@@ -30,7 +30,6 @@ public class UpdateReviewServlet extends HttpServlet {
         String reviewIdParam = request.getParameter("id");
         String productIdParam = request.getParameter("productId");
 
-        // Validate review ID using ValidationUtil
         if (!ValidationUtil.isValidLong(reviewIdParam)) {
             response.sendError(400, "Invalid review ID");
             return;
@@ -44,10 +43,7 @@ public class UpdateReviewServlet extends HttpServlet {
             return;
         }
 
-        // Only allow users to update their own reviews
         if (!review.getUserId().equals(user.getId())) {
-            logger.warn("User {} attempted to update review {} belonging to user {}",
-                    user.getEmail(), reviewId, review.getUserId());
             response.sendError(403, "You can only update your own reviews");
             return;
         }
@@ -67,11 +63,9 @@ public class UpdateReviewServlet extends HttpServlet {
         String ratingParam = request.getParameter("rating");
         String comment = request.getParameter("comment");
 
-        // Use ValidationUtil for review validation
         List<String> validationErrors = ValidationUtil.validateReview(ratingParam, productIdParam);
 
         if (!validationErrors.isEmpty()) {
-            // If validation fails, redirect back to product page with error
             Long productId = ValidationUtil.isValidLong(productIdParam) ? Long.parseLong(productIdParam) : null;
             if (productId != null) {
                 response.sendRedirect(request.getContextPath() + "/product?id=" + productId + "&error=" + validationErrors.get(0));
@@ -85,7 +79,6 @@ public class UpdateReviewServlet extends HttpServlet {
         Long productId = Long.parseLong(productIdParam);
         int rating = Integer.parseInt(ratingParam);
 
-        // Get existing review and verify ownership
         Review existingReview = reviewService.getReviewById(reviewId);
         if (existingReview == null) {
             response.sendError(404, "Review not found");
@@ -93,8 +86,6 @@ public class UpdateReviewServlet extends HttpServlet {
         }
 
         if (!existingReview.getUserId().equals(user.getId())) {
-            logger.warn("User {} attempted to update review {} belonging to user {}",
-                    user.getEmail(), reviewId, existingReview.getUserId());
             response.sendError(403, "You can only update your own reviews");
             return;
         }

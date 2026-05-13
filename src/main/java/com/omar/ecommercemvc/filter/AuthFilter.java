@@ -20,7 +20,6 @@ import java.io.IOException;
         "/delete-product", "/add-review", "/delete-account"})
 public class AuthFilter extends HttpFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -49,15 +48,11 @@ public class AuthFilter extends HttpFilter {
 
                     HttpSession newSession = request.getSession(true);
                     newSession.setAttribute("loggedInUser", user);
-                    logger.info("JWT auth successful for: {}",
-                            user.getEmail());
                 }
             }
         }
 
         if (user == null) {
-            logger.warn("Unauthenticated access attempt to: {}",
-                    request.getRequestURI());
             response.sendRedirect(request.getContextPath() + "/views/auth/login.jsp");
             return;
         }

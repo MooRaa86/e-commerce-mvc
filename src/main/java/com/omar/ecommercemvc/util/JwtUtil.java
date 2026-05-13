@@ -12,15 +12,11 @@ import java.util.Date;
 
 public class JwtUtil {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(JwtUtil.class);
-
     private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
 
     public static String generateToken(Long userId, String email, String role) {
-        logger.info("Generating JWT token for user: {}", email);
 
         return Jwts.builder()
                 .setSubject(String.valueOf(userId))
@@ -40,7 +36,6 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            logger.warn("Invalid JWT token: {}", e.getMessage());
             return null;
         }
     }

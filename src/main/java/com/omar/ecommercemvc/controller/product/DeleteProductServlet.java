@@ -30,8 +30,6 @@ public class DeleteProductServlet extends HttpServlet {
                 .getAttribute("loggedInUser");
 
         if (!"ADMIN".equals(user.getRole())) {
-            logger.warn("Non-admin user {} attempted to delete product",
-                    user.getEmail());
             response.sendError(403,
                     "Access denied. Admin only.");
             return;

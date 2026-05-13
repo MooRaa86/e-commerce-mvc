@@ -18,8 +18,6 @@ import java.util.List;
 @WebServlet("/add-review")
 public class AddReviewServlet extends HttpServlet {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(AddReviewServlet.class);
 
     private final ReviewService reviewService =
             new ReviewService();
@@ -36,11 +34,9 @@ public class AddReviewServlet extends HttpServlet {
         String ratingParam = request.getParameter("rating");
         String comment = request.getParameter("comment");
 
-        // Use ValidationUtil for validation
         List<String> validationErrors = ValidationUtil.validateReview(ratingParam, productIdParam);
 
         if (!validationErrors.isEmpty()) {
-            // Try to redirect to product page if product ID is valid
             if (ValidationUtil.isValidLong(productIdParam)) {
                 Long productId = Long.parseLong(productIdParam);
                 response.sendRedirect(request.getContextPath() + "/product?id=" + productId);
@@ -60,8 +56,6 @@ public class AddReviewServlet extends HttpServlet {
         review.setComment(comment.trim());
 
         reviewService.addReview(review);
-        logger.info("Review added for product {} by user {}",
-                productId, user.getEmail());
 
         response.sendRedirect(
                 request.getContextPath()

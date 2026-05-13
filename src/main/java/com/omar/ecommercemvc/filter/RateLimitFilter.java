@@ -16,9 +16,6 @@ import java.io.IOException;
 @WebFilter({"/*"})
 public class RateLimitFilter extends HttpFilter {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(RateLimitFilter.class);
-
     private static final int MAX_REQUESTS = 30;
     private static final int WINDOW_SECONDS = 60;
 
@@ -44,7 +41,6 @@ public class RateLimitFilter extends HttpFilter {
             response.setHeader("X-RateLimit-Reset", String.valueOf(System.currentTimeMillis() / 1000 + ttl));
 
             if (currentCount > MAX_REQUESTS) {
-                logger.warn("Rate limit exceeded for IP: {}", clientIp);
 
                 response.setStatus(429);
                 response.setHeader("Retry-After", String.valueOf(ttl));
@@ -55,7 +51,7 @@ public class RateLimitFilter extends HttpFilter {
                 return;
             }
         } catch (Exception e) {
-            logger.error("Rate limit check failed: {}", e.getMessage());
+            System.out.println(" Rate limit check failed: " + e.getMessage());
         }
 
         chain.doFilter(request, response);

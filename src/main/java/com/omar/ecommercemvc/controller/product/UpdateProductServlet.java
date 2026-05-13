@@ -29,7 +29,6 @@ public class UpdateProductServlet extends HttpServlet {
         User user = (User) request.getSession().getAttribute("loggedInUser");
 
         if (!"ADMIN".equals(user.getRole())) {
-            logger.warn("Non-admin user {} attempted to access update-product", user.getEmail());
             response.sendError(403, "Access denied. Admin only.");
             return;
         }

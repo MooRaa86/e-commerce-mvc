@@ -3,13 +3,8 @@ package com.omar.ecommercemvc.config;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RedisConfig {
-
-    private static final Logger logger =
-            LoggerFactory.getLogger(RedisConfig.class);
 
     private static final String REDIS_HOST = "localhost";
     private static final int REDIS_PORT = 6379;
@@ -24,10 +19,9 @@ public class RedisConfig {
             poolConfig.setMinIdle(1);
 
             jedisPool = new JedisPool(poolConfig, REDIS_HOST, REDIS_PORT);
-            logger.info("Redis connection pool initialized");
+            System.out.println("[REDIS] Connection pool initialized");
         } catch (Exception e) {
-            logger.error("Failed to initialize Redis pool: {}",
-                    e.getMessage());
+            System.out.println("[REDIS] Failed to initialize pool: " + e.getMessage());
         }
     }
 
@@ -39,7 +33,7 @@ public class RedisConfig {
         try (Jedis jedis = jedisPool.getResource()) {
             return "PONG".equals(jedis.ping());
         } catch (Exception e) {
-            logger.warn("Redis is not available: {}", e.getMessage());
+            System.out.println("[REDIS] Not available: " + e.getMessage());
             return false;
         }
     }

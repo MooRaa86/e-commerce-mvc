@@ -3,21 +3,15 @@ package com.omar.ecommercemvc.service;
 import com.omar.ecommercemvc.dao.ProductDAO;
 import com.omar.ecommercemvc.model.Product;
 import com.omar.ecommercemvc.util.CacheConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class ProductService {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(ProductService.class);
-
     private final ProductDAO productDAO = new ProductDAO();
     private final CacheService cacheService = new CacheService();
 
     public List<Product> getAllProducts() {
-        logger.info("Fetching all products");
         List<Product> cached = cacheService.getList(CacheConstants.PRODUCTS_CACHE_KEY, Product.class);
 
         if (cached != null) {
@@ -29,7 +23,6 @@ public class ProductService {
     }
 
     public Product getProductById(Long id) {
-        logger.info("Fetching product with id: {}", id);
         Product cached = cacheService.get(CacheConstants.PRODUCT_CACHE_PREFIX + id, Product.class);
         if (cached != null) {
             return cached;
@@ -37,21 +30,17 @@ public class ProductService {
         Product product = productDAO.findById(id);
         if (product != null) {
             cacheService.set(CacheConstants.PRODUCT_CACHE_PREFIX + id, product);
-        } else {
-            logger.warn("Product not found with id: {}", id);
         }
         return product;
     }
 
     public boolean addProduct(Product product) {
-        logger.info("Adding new product: {}", product.getName());
         productDAO.save(product);
         cacheService.delete(CacheConstants.PRODUCTS_CACHE_KEY);
         return true;
     }
 
     public boolean updateProduct(Product product) {
-        logger.info("Updating product with id: {}", product.getId());
         boolean updated = productDAO.update(product);
 
         if (updated) {
@@ -63,7 +52,6 @@ public class ProductService {
     }
 
     public boolean deleteProduct(Long id) {
-        logger.info("Deleting product with id: {}", id);
         boolean deleted = productDAO.deleteById(id);
 
         if (deleted) {

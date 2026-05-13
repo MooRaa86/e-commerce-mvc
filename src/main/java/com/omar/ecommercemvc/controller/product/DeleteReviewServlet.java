@@ -28,7 +28,6 @@ public class DeleteReviewServlet extends HttpServlet {
 
         String reviewIdParam = request.getParameter("id");
 
-        // Validate review ID using ValidationUtil
         if (!ValidationUtil.isValidLong(reviewIdParam)) {
             response.sendError(400, "Invalid review ID");
             return;
@@ -36,7 +35,6 @@ public class DeleteReviewServlet extends HttpServlet {
 
         Long reviewId = Long.parseLong(reviewIdParam);
 
-        // Get review before deletion to verify ownership and get product ID for redirect
         Review review = reviewService.getReviewById(reviewId);
 
         if (review == null) {
@@ -44,10 +42,7 @@ public class DeleteReviewServlet extends HttpServlet {
             return;
         }
 
-        // Only allow users to delete their own reviews (or admin can delete any)
         if (!review.getUserId().equals(user.getId()) && !"ADMIN".equals(user.getRole())) {
-            logger.warn("User {} attempted to delete review {} belonging to user {}",
-                    user.getEmail(), reviewId, review.getUserId());
             response.sendError(403, "You can only delete your own reviews");
             return;
         }

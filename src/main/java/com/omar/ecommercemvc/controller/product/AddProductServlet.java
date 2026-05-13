@@ -19,8 +19,6 @@ import java.util.List;
 @WebServlet("/add-product")
 public class AddProductServlet extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(AddProductServlet.class);
-
     private final ProductService productService = new ProductService();
 
     @Override
@@ -29,7 +27,6 @@ public class AddProductServlet extends HttpServlet {
         User user = (User) request.getSession().getAttribute("loggedInUser");
 
         if (!"ADMIN".equals(user.getRole())) {
-            logger.warn("Non-admin user {} attempted to access add-product", user.getEmail());
             response.sendError(403, "Access denied. Admin only.");
             return;
         }
@@ -51,7 +48,6 @@ public class AddProductServlet extends HttpServlet {
         String priceStr = request.getParameter("price");
         String imageUrl = request.getParameter("imageUrl");
 
-        // Use ValidationUtil for validation
         List<String> validationErrors = ValidationUtil.validateProduct(name, priceStr);
 
         if (!validationErrors.isEmpty()) {
@@ -69,7 +65,6 @@ public class AddProductServlet extends HttpServlet {
         product.setImageUrl(imageUrl != null ? imageUrl.trim() : "");
 
         productService.addProduct(product);
-        logger.info("Product added: {} by admin: {}", name, user.getEmail());
         response.sendRedirect(request.getContextPath() + "/home");
     }
 }
