@@ -41,13 +41,11 @@ public class RateLimitFilter extends HttpFilter {
             response.setHeader("X-RateLimit-Reset", String.valueOf(System.currentTimeMillis() / 1000 + ttl));
 
             if (currentCount > MAX_REQUESTS) {
-
                 response.setStatus(429);
                 response.setHeader("Retry-After", String.valueOf(ttl));
-                response.setContentType("text/html");
-                response.getWriter().write(
-                        "<h2>429 - Too Many Requests</h2>"
-                        + "<p>Please try again later.</p>");
+                request.setAttribute("errorCode", 429);
+                request.setAttribute("errorMessage", "Too many requests. Please try again later.");
+                request.getRequestDispatcher("/views/error/error.jsp").forward(request, response);
                 return;
             }
         } catch (Exception e) {

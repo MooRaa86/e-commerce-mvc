@@ -7,16 +7,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 
 @WebServlet("/delete-product")
 public class DeleteProductServlet extends HttpServlet {
-
-    private static final Logger logger =
-            LoggerFactory.getLogger(DeleteProductServlet.class);
 
     private final ProductService productService =
             new ProductService();
@@ -52,13 +46,6 @@ public class DeleteProductServlet extends HttpServlet {
 
         boolean deleted =
                 productService.deleteProduct(productId);
-
-        if (deleted) {
-            logger.info("Product {} deleted by admin: {}",
-                    productId, user.getEmail());
-        } else {
-            logger.warn("Failed to delete product: {}", productId);
-        }
 
         response.sendRedirect(
                 request.getContextPath() + "/home"

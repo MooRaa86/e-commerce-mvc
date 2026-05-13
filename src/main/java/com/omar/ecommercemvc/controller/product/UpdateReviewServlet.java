@@ -9,16 +9,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/update-review")
 public class UpdateReviewServlet extends HttpServlet {
-
-    private static final Logger logger = LoggerFactory.getLogger(UpdateReviewServlet.class);
 
     private final ReviewService reviewService = new ReviewService();
 
@@ -75,6 +70,11 @@ public class UpdateReviewServlet extends HttpServlet {
             return;
         }
 
+        if (!ValidationUtil.isValidLong(reviewIdParam)) {
+            response.sendError(400, "Invalid review ID");
+            return;
+        }
+
         Long reviewId = Long.parseLong(reviewIdParam);
         Long productId = Long.parseLong(productIdParam);
         int rating = Integer.parseInt(ratingParam);
@@ -97,13 +97,7 @@ public class UpdateReviewServlet extends HttpServlet {
         review.setRating(rating);
         review.setComment(comment != null ? comment.trim() : "");
 
-        boolean updated = reviewService.updateReview(review);
-
-        if (updated) {
-            logger.info("Review {} updated by user {}", reviewId, user.getEmail());
-        } else {
-            logger.warn("Failed to update review: {}", reviewId);
-        }
+        reviewService.updateReview(review);
 
         response.sendRedirect(request.getContextPath() + "/product?id=" + productId);
     }

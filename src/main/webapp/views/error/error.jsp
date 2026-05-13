@@ -23,6 +23,10 @@
         title = "404 — Not Found"; heading = "Page Not Found";
         description = "The page you're looking for doesn't exist.";
         iconColor = "#6366f1"; break;
+      case 429:
+        title = "429 — Too Many Requests"; heading = "Slow Down!";
+        description = "You've made too many requests. Please wait a moment and try again.";
+        iconColor = "#f59e0b"; break;
       case 500:
         title = "500 — Server Error"; heading = "Internal Server Error";
         description = errorMessage != null ? errorMessage : "Something went wrong on our end. Please try again later.";

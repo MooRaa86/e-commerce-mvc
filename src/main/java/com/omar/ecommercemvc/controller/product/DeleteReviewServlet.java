@@ -9,15 +9,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 
 @WebServlet("/delete-review")
 public class DeleteReviewServlet extends HttpServlet {
-
-    private static final Logger logger = LoggerFactory.getLogger(DeleteReviewServlet.class);
 
     private final ReviewService reviewService = new ReviewService();
 
@@ -48,13 +43,7 @@ public class DeleteReviewServlet extends HttpServlet {
         }
 
         Long productId = review.getProductId();
-        boolean deleted = reviewService.deleteReview(reviewId);
-
-        if (deleted) {
-            logger.info("Review {} deleted by user {}", reviewId, user.getEmail());
-        } else {
-            logger.warn("Failed to delete review: {}", reviewId);
-        }
+        reviewService.deleteReview(reviewId);
 
         response.sendRedirect(request.getContextPath() + "/product?id=" + productId);
     }

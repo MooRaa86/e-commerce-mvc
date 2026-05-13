@@ -19,6 +19,9 @@ public class ExceptionHandlerFilter extends HttpFilter {
         try {
             chain.doFilter(request, response);
         } catch (Exception e) {
+            if (response.isCommitted()) {
+                return;
+            }
             String message = e.getMessage();
             if (e instanceof ServletException) {
                 Throwable rootCause = ((ServletException) e).getRootCause();

@@ -9,17 +9,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
 @WebServlet("/update-product")
 public class UpdateProductServlet extends HttpServlet {
-
-    private static final Logger logger = LoggerFactory.getLogger(UpdateProductServlet.class);
 
     private final ProductService productService = new ProductService();
 
@@ -107,12 +102,6 @@ public class UpdateProductServlet extends HttpServlet {
         product.setImageUrl(imageUrl != null ? imageUrl.trim() : "");
 
         boolean updated = productService.updateProduct(product);
-
-        if (updated) {
-            logger.info("Product {} updated by admin: {}", productId, user.getEmail());
-        } else {
-            logger.warn("Failed to update product: {}", productId);
-        }
 
         response.sendRedirect(request.getContextPath() + "/home");
     }
